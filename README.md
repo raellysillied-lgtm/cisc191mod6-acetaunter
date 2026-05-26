@@ -7,7 +7,7 @@ In this lab, you will use a 1v1 matching game server theme to practice:
 - collections
 - advanced stream pipelines
 
-## Learning Goals
+## Learning Goals a
 
 By the end of this lab, you should be able to:
 1. implement a generic collection-backed class
