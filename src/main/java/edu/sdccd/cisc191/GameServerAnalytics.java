@@ -4,7 +4,7 @@ import java.util.*;
 
 public class GameServerAnalytics {
 
-    public static List<String> findTopNUsernamesByRating(Collection<PlayerAccount> players, int n) {
+    public static List<String> findTopNUsernamesByRating(Collection<PlayerAccount> players, int n) { // Correct standard approach
         // TODO: use a stream pipeline
         return players.stream()
                 .sorted(Comparator.comparingInt(PlayerAccount::rating).reversed())
@@ -18,31 +18,26 @@ public class GameServerAnalytics {
         return players.stream()
                 .collect(java.util.stream.Collectors.groupingBy(
                         PlayerAccount::region,
-                        java.util.stream.Collectors.averagingInt(PlayerAccount::rating)
+                        Collectors.averagingInt(PlayerAccount::rating)
                 ));
     }
 
     public static Set<String> findDuplicateUsernames(Collection<PlayerAccount> players) {
         // TODO: use collections and/or streams
-        Set<String> seen = new java.util.HashSet<>();
-        Set<String> dups = new java.util.HashSet<>();
-        for (var p : players) {
-            if (!seen.add(p.username())) {
-                dups.add(p.username());
-            }
-        }
-        return dups;
+        // Again, really like this return logic, though I think it makes more sense to implement the use of streams instead
+        return counts.entrySet().stream()  // Map.Entry<String, Long>
+                .filter(entry -> entry.getValue() > 1) // check which has more than one
+                .map(entry -> entry.getKey()) // throw away values
+                .collect(Collectors.toSet());
     }
 
-    public static Map<String, List<String>> groupUsernamesByTier(Collection<PlayerAccount> players) {
+    public static Map<String, List<String>> groupUsernamesByTier(Collection<PlayerAccount> players) { // Completely correct, just cleaned up syntax
         // TODO: use groupingBy and mapping
         return players.stream()
-                .collect(java.util.stream.Collectors.groupingBy(
-                        GameServerAnalytics::tierFor,
-                        java.util.stream.Collectors.mapping(
-                                PlayerAccount::username,
-                                java.util.stream.Collectors.toList()
-                        )
+                .sorted(Comparator.comparing(PlayerAccount::username)) // sort alphabetically
+                .collect(Collectors.groupingBy(
+                        GameServerAnalytics::tierFor, // groups of tiers
+                        Collectors.mapping(PlayerAccount::username, Collectors.toList()) // accumulate into names
                 ));
     }
 
