@@ -17,7 +17,7 @@ public class GenericMatchQueue<T> {
         if (items.isEmpty()) {
             throw new IllegalStateException("Queue is empty");
         }
-        return items.removeFirst();
+        return items.removeFirst(); // I like the use of this return method
     }
 
     public T peek() {
@@ -31,7 +31,7 @@ public class GenericMatchQueue<T> {
 
     public boolean isEmpty() {
          // TODO: return true when the queue has no items
-        return items.isEmpty();
+        return items.isEmpty(); // I find this also very effective, not much to say about this file, everything seems to be working great
     }
 
     public int size() {
